@@ -1,0 +1,149 @@
+﻿<html>
+
+<head>
+    <title>课程表</title>
+
+    <center>
+
+        <h1 align="center"><b><em>
+                    <caption>2018-2019-2课程表</caption>
+                </em></b></h1>
+
+        <style>
+            table {
+                /*表格边距*/
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .th {
+                /*表格样式*/
+                text-align: center;
+                font-size: 3vmin;
+                width: 14.28%;
+                height: 14.28%;
+                background-color: rgba(245, 240, 175, 0.479);
+                border: 1px solid rgba(0, 0, 0, 0.301)
+            }
+
+            .td {
+                /*表格样式*/
+                text-align: center;
+                font-size: 3vmin;
+                width: 14.28%;
+                height: 14.28%;
+                background-color: rgba(255, 213, 174, 0.479);
+                -webkit-border-radius: 10px;
+                border-radius: 10px;
+                border: 2px solid rgba(0, 0, 0, 0.301)
+            }
+
+            td.set:hover {
+                /*表格浮动*/
+                position: relative;
+                top: 2px;
+                left: 2px;
+                z-index: 5px;
+                box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.301)inset;
+            }
+
+            .cell {
+                /*定义样式*/
+                height: 3.9em;
+                width: 8em;
+                word-wrap: break-word;
+                word-break: break-all;
+                overflow: hidden;
+            }
+
+            .cell>.detail {
+                /*表格隐藏*/
+                display: none;
+            }
+
+            .cell>.detail.open {
+                /*显示表格*/
+                display: block;
+                position: absolute;
+                height: 6.6em;
+                width: 12em;
+                background-color: rgb(252, 219, 177);
+                -webkit-border-radius: 10px;
+                border-radius: 10px;
+            }
+        </style>
+
+</head>
+
+<body>
+    <table id="grid" class="table">
+    </table>
+
+    <script>
+        let timetable = new Array(" ", " ", "星期一", "星期二", "星期三", "星期四", "星期五",
+            "上", "08：20~10：00", "web应用开发技术(单周)", "西方文化导论", "管理信息系统", "运营管理(单周)<br />数据库原理及其应用（双周）", " ",
+            "午", "10：20~12：00", "毛泽东思想和中国特色社会主义概论", "管理科学基础", "毛泽东思想和中国特色社会主义概论", "管理科学基础", "运营管理",
+            " ", " ", "午", " ", "休", " ", " ",
+            "下", "14：00~15：40", "管理信息系统", "形势与政策", "会计学(单周)<br />应用开发技术(双周)", "体育-羽毛球", "毛泽东思想和中国特色社会主义概论",
+            "午", "16：00~17：40", "电子商务", "数据库原理及应用", " ", "会计学", " ");
+        let dtime = new Array(" ", " ", "星期一", "星期二", "星期三", "星期四", "星期五",
+            "上午", "08：20~10：00", "web应用开发技术(单周)<br />一公教C411", "西方文化导论<br />一公教C311", "管理信息系统<br />一公教C105", "运营管理(单周)<br />一公教B405<br />数据库原理及其应用（双周）<br />一公教B405", " ",
+            "上午", "10：20~12：00", "毛泽东思想和中国特色社会主义概论<br />一公教A120", "管理科学基础<br />一公教C411", "毛泽东思想和中国特色社会主义概论<br />一公教A120", "管理科学基础<br />一公教C411", "运营管理<br />一公教B405",
+            " ", " ", "午", " ", "休", " ", " ",
+            "下午", "14：00~15：40", "管理信息系统<br />管院上机实验室140", "形势与政策<br />一公教C123", "会计学(单周)<br />一公教B101<br />应用开发技术(双周)<br />管院上机实验室140", "体育-羽毛球<br />副馆", "毛泽东思想和中国特色社会主义概论<br />一公教A120",
+            "下午", "16：00~17：40", "电子商务<br />一公教B303", "数据库原理及应用<br />管院上机实验室140", " ", "会计学<br />一公教B101", " ");
+
+        let tblEl = document.getElementById('grid');/*创建表格*/
+        for (let i = 0; i < 6; i++) {
+            let trEl = document.createElement('tr');
+            for (let j = 0; j < 7; j++) {
+                let tdEl = document.createElement('td');
+                let divEl = document.createElement('div')
+                divEl.className = 'cell';
+
+                let detailDivEl = document.createElement('div');/*细节表格*/
+                if (i != 0 && i != 3 && ((7 * i + j) % 7) != 0 && ((7 * i + j) % 7) != 1) {
+                    detailDivEl.className = 'detail';
+                    detailDivEl.innerHTML = dtime[7 * i + j];
+                };
+
+                detailDivEl.onmouseout = function (event) {   /*鼠标离开目标时触发事件*/
+                    let names = detailDivEl.className.split(' ');
+                    names = names.filter((x) => x != 'open')
+                    detailDivEl.className = names.join(' ');
+                }
+                divEl.append(detailDivEl);
+
+                let briefDivEl = document.createElement('div');/*添加文本*/
+                briefDivEl.innerHTML = timetable[7 * i + j];
+                divEl.append(briefDivEl);
+
+                tdEl.onclick = function (event) {    /*点击显示细节*/
+                    let names = detailDivEl.className.split(' ');
+
+                    if (names.indexOf('open') >= 0) {
+                        names = names.filter((x) => x != 'open')
+                    } else {
+                        names.push('open');
+                    }
+
+                    detailDivEl.className = names.join(' ');
+                };
+
+
+                let classNames = [];         /*设置样式*/
+                if (i != 0 && i != 3 && (7 * i + j) % 7 != 0 && ((7 * i + j) % 7) != 1)
+                    classNames.push('set','td');
+                    else  classNames.push('th');
+                tdEl.className = classNames.join(' ');
+
+                tdEl.append(divEl);
+                trEl.append(tdEl);
+            }
+            tblEl.append(trEl);
+        }
+
+    </script>
+    </center>
+</body>
+
+</html>
